@@ -20,7 +20,6 @@ function rerender(list_cards){
 		closeElem.addEventListener('click', () =>{
 			worksheet = worksheet.filter(elem => elem.id !== list_cards[i].id);
 			findElem.value = '';
-			//console.log(list_cards);
 			rerender(worksheet);
 		});
 
@@ -49,6 +48,7 @@ function rerender(list_cards){
 		closeElem.innerText = '✖';
 		card.style.backgroundColor = list_cards[i].color;
 	};
+	save_data(worksheet, find_result, st);
 };
 
 formAddElem.addEventListener('submit', event => {
@@ -74,3 +74,7 @@ findElem.addEventListener('input', () =>{
 			console.log(find_result);		
 			rerender (find_result);	
 });
+
+function save_data (w_sheet, f_result, st_st){
+
+}
