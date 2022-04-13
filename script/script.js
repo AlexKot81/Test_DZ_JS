@@ -10,6 +10,29 @@ let st = 0;
 let find_result = [];
 
 
+formAddElem.addEventListener('submit', event => {
+  event.preventDefault();
+  findElem.value = '';
+  if (wordElem.value !== '' && transElem.value !== '' && colorElem.value !== '') {
+  	st++;
+  	worksheet.push({
+  	word: wordElem.value,
+  	trans: transElem.value,
+  	color: colorElem.value,
+  	id: st,
+  	lang: 'eng'
+  })
+  rerender(worksheet);
+  }else{
+  	alert("Заполните все поля");
+  } 
+});
+
+findElem.addEventListener('input', () =>{
+			find_result = worksheet.filter(elem => elem.word.startsWith(findElem.value) || elem.trans.startsWith(findElem.value));		
+			rerender (find_result);	
+});
+
 function rerender(list_cards){
 	worksheetElem.innerText = '';
 	for (let i = 0; i< list_cards.length; i++){
@@ -30,7 +53,8 @@ function rerender(list_cards){
 			 }else{
 			  c_wordElem.innerText = list_cards[i].word;
 			 	list_cards[i].lang = 'eng'
-			}
+			};
+			rerender(worksheet);
 		});
 				
 		card.classList.add('card');
@@ -48,33 +72,31 @@ function rerender(list_cards){
 		closeElem.innerText = '✖';
 		card.style.backgroundColor = list_cards[i].color;
 	};
-	save_data(worksheet, find_result, st);
+	save_data(worksheet, st);
 };
 
-formAddElem.addEventListener('submit', event => {
-  event.preventDefault();
-  findElem.value = '';
-  if (wordElem.value !== '' && transElem.value !== '' && colorElem.value !== '') {
-  	st++;
-  	worksheet.push({
-  	word: wordElem.value,
-  	trans: transElem.value,
-  	color: colorElem.value,
-  	id: st,
-  	lang: 'eng'
-  })
+function save_data (w_sheet, st_st){
+		if (w_sheet.length === 0){
+    localStorage.removeItem('w_Sheet');
+  		}else{
+  			localStorage.setItem('w_Sheet', JSON.stringify(w_sheet));
+  	};
+  	localStorage.setItem('st_St', st_st);
+};
+
+function set_data (){
+    st = localStorage.getItem('st_St');
+    let w_Sheet = JSON.parse(localStorage.getItem('w_Sheet'))
+    
+    if (st === null){
+      st = 0;
+    };
+    
+    if (w_Sheet !== null){
+      worksheet = w_Sheet;
+  };
   rerender(worksheet);
-  }else{
-  	alert("Заполните все поля");
-  } 
-});
+};
 
-findElem.addEventListener('input', () =>{
-			find_result = worksheet.filter(elem => elem.word.startsWith(findElem.value) || elem.trans.startsWith(findElem.value));
-			console.log(find_result);		
-			rerender (find_result);	
-});
+ set_data();
 
-function save_data (w_sheet, f_result, st_st){
-
-}
